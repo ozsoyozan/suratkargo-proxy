@@ -14,6 +14,14 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/', (req, res) => res.send('Surat Kargo Proxy aktif'));
+
+app.get('/myip', async (req, res) => {
+  const response = await fetch('https://api.ipify.org?format=json');
+  const data = await response.json();
+  res.json(data);
+});
+
 app.post('/OrtakBarkodOlustur', async (req, res) => {
   try {
     const response = await fetch(`${SURAT_API}/OrtakBarkodOlustur`, {
@@ -41,8 +49,6 @@ app.post('/KargoTakipHareketDetayi', async (req, res) => {
     res.status(500).json({ isError: true, Message: err.message });
   }
 });
-
-app.get('/', (req, res) => res.send('Surat Kargo Proxy aktif'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Proxy ${PORT} portunda çalışıyor`));
